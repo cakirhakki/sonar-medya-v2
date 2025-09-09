@@ -1,0 +1,45 @@
+# ── Günlükler / Sistem dosyaları
+*.log
+.DS_Store
+Thumbs.db
+
+# ── Ortam dosyaları (gizli)
+.env
+.env.backup
+.env.production
+# .env.example DOSYASINI TAKİPTE BIRAK (paylaşım için gerekli)
+
+# ── IDE / Editör / Araç klasörleri
+/.fleet
+/.idea
+/.nova
+/.phpunit.cache
+/.vscode
+/.zed
+/.history
+.phpactor.json
+.phpunit.result.cache
+auth.json
+Homestead.json
+Homestead.yaml
+
+# ── Node & Vite çıktıları
+/node_modules
+/public/build
+/public/hot
+npm-debug.log*
+yarn-error.log*
+
+# ── Laravel depoları
+/vendor
+/public/storage
+/storage/*.key
+/storage/pail
+/storage/logs/
+/storage/framework/cache/**
+/storage/framework/sessions/**
+/storage/framework/views/**
+/storage/app/*.tmp
+
+# (Opsiyonel) bootstrap cache dosyaları—genelde izlenmez
+# /bootstrap/cache/*.php
