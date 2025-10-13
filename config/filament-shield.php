@@ -1,6 +1,7 @@
 <?php
 
 return [
+
     'shield_resource' => [
         'should_register_navigation' => true,
         'slug' => 'shield/roles',
@@ -23,12 +24,12 @@ return [
     'super_admin' => [
         'enabled' => true,
         'name' => 'super_admin',
-        'define_via_gate' => true,
+        'define_via_gate' => false,
         'intercept_gate' => 'before', // after
     ],
 
     'panel_user' => [
-        'enabled' => false,
+        'enabled' => true,
         'name' => 'panel_user',
     ],
 
@@ -47,8 +48,7 @@ return [
             'force_delete',
             'force_delete_any',
         ],
-
-        'page' => 'page',
+        'page'   => 'page',
         'widget' => 'widget',
     ],
 
@@ -65,28 +65,38 @@ return [
         'policy_namespace' => 'Policies',
     ],
 
+    // 🔸 DİKKAT: Burada "resources" için FQCN DEĞİL, sınıfın kısa adını veriyoruz.
     'exclude' => [
-        'enabled' => true,
+        'enabled' => false,
 
+        // Page/WIDGET tarafında paket varsayılanları:
         'pages' => [
             'Dashboard',
         ],
 
         'widgets' => [
-            'AccountWidget', 'FilamentInfoWidget',
+            'AccountWidget',
+            'FilamentInfoWidget',
         ],
 
-        'resources' => [],
+        // BURASI ÖNEMLİ: Resource sınıf BASENAME'leri
+        'resources' => [
+            'CommentResource',       // \App\Filament\Resources\CommentResource
+            'PostCategoryResource',  // \App\Filament\Resources\PostCategoryResource
+            'ServicePackageResource', // \App\Filament\Resources\ServicePackageResource
+            // Eğer farklı panel/cluster altında iseler YİNE basename yazılır:
+            // 'CategoryResource', 'WhateverResource', ...
+        ],
     ],
 
     'discovery' => [
-        'discover_all_resources' => false,
-        'discover_all_widgets' => false,
-        'discover_all_pages' => false,
+        'discover_all_resources' => true,
+        'discover_all_widgets' => true,
+        'discover_all_pages' => true,
     ],
 
     'register_role_policy' => [
-        'enabled' => true,
+        'enabled' => false,
     ],
 
 ];

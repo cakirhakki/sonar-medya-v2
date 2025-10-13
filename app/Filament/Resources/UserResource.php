@@ -51,11 +51,15 @@ class UserResource extends Resource
      * Menü görünürlüğü — Shield izin adıyla koşullandır.
      * view_any_user izni olan menüyü görür.
      */
+    // public static function shouldRegisterNavigation(): bool
+    // {
+    //     $u = static::currentUser();
+    //     return $u?->can('view_any_user') ?? true;
+    // }
     public static function shouldRegisterNavigation(): bool
-    {
-        $u = static::currentUser();
-        return $u?->can('view_any_user') ?? false;
-    }
+{
+    return true; // geçici
+}
 
     public static function form(Form $form): Form
     {

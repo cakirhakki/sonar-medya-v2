@@ -1,0 +1,198 @@
+/* ================================
+   custom.css — Sonar Medya
+   (main.css'ten SONRA yüklensin)
+   ================================ */
+
+/* Marka rengi #F50963 olarak tüm tema değişkenlerine yönlendir */
+:root{
+  /* tek kaynak */
+  --brand: #F50963;
+  --brand-dark: #C3004B;
+  --brand-rgb: 245, 9, 99;
+
+  /* tema değişkenlerini markaya bağla */
+  --tp-theme-1: var(--brand);
+  --tp-theme-1-dark: var(--brand-dark);
+  --tp-rgb-theme-1: var(--brand-rgb);
+
+  --tp-theme-2: var(--brand);
+  --tp-theme-2-dark: var(--brand-dark);
+  --tp-rgb-theme-2: var(--brand-rgb);
+
+  --tp-theme-3: var(--brand);
+  --tp-theme-4: var(--brand);
+  --tp-theme-4-dark: var(--brand-dark);
+  --tp-theme-5: var(--brand);
+  --tp-theme-6: var(--brand);
+  --tp-theme-7: var(--brand);
+  --tp-theme-8: var(--brand);
+  --tp-theme-9: var(--brand);
+  --tp-theme-10: var(--brand);
+
+  /* RGBA kullanan yerler için (gerekirse) */
+  --tp-rgb-theme-3: var(--brand-rgb);
+  --tp-rgb-theme-4: var(--brand-rgb);
+  --tp-rgb-theme-5: var(--brand-rgb);
+  --tp-rgb-theme-6: var(--brand-rgb);
+  --tp-rgb-theme-7: var(--brand-rgb);
+  --tp-rgb-theme-8: var(--brand-rgb);
+  --tp-rgb-theme-9: var(--brand-rgb);
+  --tp-rgb-theme-10: var(--brand-rgb);
+}
+
+/* Logo boyutu (responsive) */
+.site-logo {
+  height: 44px;          /* temel yükseklik */
+  width: auto;           /* oranı koru */
+  display: block;        /* hizalama sorunlarını önle */
+  object-fit: contain;
+}
+
+@media (min-width: 768px) {  /* md+ */
+  .site-logo { height: 52px; }
+}
+@media (min-width: 1200px) { /* xl+ */
+  .site-logo { height: 56px; }
+}
+
+/* Sticky/scroll küçültmek istersen örnek: */
+.header--scrolled .site-logo { height: 40px; }
+
+/* Offcanvas logo daha küçük */
+.offcanvas__logo img{
+  height: 34px;
+  width: auto;
+  display: block;
+  object-fit: contain;
+}
+
+/* HERO görseli: hassas hizalama */
+.snr-center { display:flex; align-items:center; justify-content:center; width:100%; }
+.snr-center .snr-center__item{ position:static !important; margin:0 !important; padding:0 !important; }
+.snr-center__img{ display:block; height:auto; max-width:100%; }
+
+/* Desktop: görseli 1 tık aşağı al (çok abartmadan) */
+@media (min-width: 1200px){
+  .snr-center__img{ margin-top: 16px; }        /* 8–24px arası oynayabilirsin */
+}
+
+/* Tablet: biraz küçült + ortala */
+@media (max-width: 991.98px){
+  .snr-center__img{ width: 86%; margin: 12px auto 0; }
+}
+
+/* Mobil: kesilmeyi önle, şekilleri sadeleştir */
+@media (max-width: 575.98px){
+  .snr-center__img{ width: 88%; margin: 8px auto 0; }
+  .slider__shape img{ display: none !important; }  /* dekoratif şekilleri kapat */
+}
+
+/* (Opsiyonel) Hero altındaki avatar/placeholder satırını gizlemek için */
+@media (min-width: 0){
+  .slider__user{ display:none; }
+}
+/* ========== FEATURES – Eşit yükseklik + başlık hizalama ========== */
+
+/* Kolonları flex yap: kartlar aynı satırda eşit yüksekte dursun */
+.features__area .row > [class*="col-"]{
+  display: flex;
+}
+
+/* Kartın kendisi esneyebilsin ve dikey düzenlensin */
+.features__area .features__item{
+  flex: 1 1 auto;
+  display: flex;
+  flex-direction: column;
+}
+
+/* İçerik alanını dikey yay; buton en alta insin */
+.features__area .features__content{
+  flex: 1 1 auto;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Ok butonu her zaman kartın en altında */
+.features__area .features__btn{
+  margin-top: auto;
+}
+
+/* (Opsiyonel) Daha küçük breakpoint'lerde de yüksekliği korumak istersen */
+@media (min-width: 992px){
+  .features__area .features__item{ height: 100%; }
+}
+
+/* XL ve üzeri: son kart başlığını tek satıra sığdır (çok taşarsa ufak küçült) */
+@media (min-width: 1200px){
+  .features__area .features__item.has-purple .features__title.snr-title-sm{
+    white-space: nowrap;
+    font-size: 20px;      /* Gerekirse 19–21px arası oynatabilirsin */
+    line-height: 1.25;
+  }
+}
+/* CTA başlık: masaüstünde 2 satırda kalsın, mobilde orantılı küçülsün */
+.cta__area .cta__title-6{
+  line-height: 1.1;
+  /* genişliği karaktere göre sınırla (satır sayısını kontrol eder) */
+  max-width: 18ch; 
+  /* ekran genişliğine göre ölçeklenen font */
+  font-size: clamp(28px, 3vw, 56px);
+}
+
+/* XL ve üzeri – biraz daha sıkı */
+@media (min-width: 1400px){
+  .cta__area .cta__title-6{ max-width: 17ch; font-size: 56px; }
+}
+
+/* LG – daha küçük font ve biraz daha geniş satır */
+@media (max-width: 1199.98px){
+  .cta__area .cta__title-6{ max-width: 20ch; font-size: clamp(24px, 3.4vw, 46px); }
+}
+
+/* Tablet / mobil – rahat okusun */
+@media (max-width: 991.98px){
+  .cta__area .cta__title-6{ max-width: 24ch; font-size: clamp(22px, 5.2vw, 38px); }
+}
+
+/* Footer logo: akışkan ama tavanı sınırlı */
+.sm-footer-logo{
+  width: auto !important;
+  height: auto !important;
+  max-width: clamp(140px, 14vw, 220px) !important; /* xs: ~140px, lg civarı: ~220px */
+  display: inline-block;
+}
+
+/* İstersen daha ince ayar */
+@media (max-width: 992px){   /* md - lg arası */
+  .sm-footer-logo{ max-width: 190px !important; }
+}
+@media (max-width: 576px){   /* xs - sm */
+  .sm-footer-logo{ max-width: 160px !important; }
+}
+/* Footer contact: adres, tel, e-posta beyaz kalsın */
+.footer__info-text-6,
+.footer__info-text-6 a,
+.footer__info-text-6 a:visited,
+.footer__info-text-6 span {
+  color: #fff !important;
+  opacity: 1 !important;
+}
+.footer__info-text-6 a:hover {
+  opacity: .85;
+}
+
+/* Sadece aktif panel görünsün */
+.services__tab-panel { display: none; }
+.services__tab-panel.is-active { display: block; }
+/* Çözüm-neden satır eşlemesi */
+.solutions-paired .sp-item{position:relative;padding-left:1.25rem;line-height:1.6}
+.solutions-paired .sp-dot{
+  position:absolute;left:.1rem;top:.55rem;width:.45rem;height:.45rem;
+  border-radius:50%;background-color:currentColor;opacity:.9
+}
+@media (max-width: 991.98px){
+  .solutions-paired .solution-row{margin-bottom:.5rem}
+}
+
+
+

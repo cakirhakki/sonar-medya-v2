@@ -13,7 +13,12 @@ class ListServicePackages extends ListRecords
     protected function getHeaderActions(): array
     {
         return [
-            Actions\CreateAction::make(),
+            Actions\CreateAction::make()->label('Yeni Paket'),
         ];
+    }
+
+    public function getTitle(): string
+    {
+        return 'Paketler';
     }
 }

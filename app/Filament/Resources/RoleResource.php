@@ -52,7 +52,7 @@ class RoleResource extends Resource
     public static function shouldRegisterNavigation(): bool
     {
         $u = static::currentUser();
-        return $u?->can('view_any_role') ?? false;
+        return $u?->can('view_any_role') ?? true;
     }
 
     public static function form(Form $form): Form

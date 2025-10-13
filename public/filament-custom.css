@@ -1,0 +1,13 @@
+/* Filament brand logosu – inline style'ı ez */
+img.fi-logo {
+  height: 44px !important;   /* istediğin değeri ver */
+  width: auto !important;
+}
+
+/* Dar ekranda biraz küçült */
+@media (max-width: 640px) {
+  img.fi-logo { height: 32px !important; }
+}
+
+/* İstersen attribute seçiciyle spesifikliği artır (gerekirse) */
+img.fi-logo[style] { height: 44px !important; }

@@ -3,39 +3,41 @@
 namespace App\Filament\Resources\ServiceResource\Pages;
 
 use App\Filament\Resources\ServiceResource;
-use App\Http\Requests\ServiceStoreRequest;
 use Filament\Resources\Pages\CreateRecord;
-use Illuminate\Support\Facades\Validator;
 
 class CreateService extends CreateRecord
 {
     protected static string $resource = ServiceResource::class;
 
-    /**
-     * Kaydetmeden önce sunucu tarafı doğrulama (FormRequest).
-     */
+    public function getTitle(): string
+    {
+        return 'Yeni Hizmet';
+    }
+
+    protected function getCreatedNotificationTitle(): ?string
+    {
+        return 'Hizmet oluşturuldu';
+    }
+
     protected function mutateFormDataBeforeCreate(array $data): array
     {
-        Validator::make(
-            $data,
-            (new ServiceStoreRequest())->rules(),
-            (new ServiceStoreRequest())->messages(),
-            (new ServiceStoreRequest())->attributes()
-        )->validate();
-
+        // 'tags' veritabanı alanı değil; kayıttan sonra sync edilecek.
+        unset($data['tags']);
         return $data;
     }
 
-    /**
-     * Kayıt sonrası listeye dön.
-     */
-    protected function getRedirectUrl(): string
+    protected function afterCreate(): void
     {
-        return $this->getResource()::getUrl('index');
+        $tags = $this->data['tags'] ?? [];
+        try {
+            $this->record->syncTags($tags);
+        } catch (\Throwable $e) {
+            // Tag tabloları yoksa sessiz geç
+        }
     }
 
-    public function getTitle(): string
+    protected function getRedirectUrl(): string
     {
-        return 'Hizmet Oluştur';
+        return static::getResource()::getUrl('index');
     }
 }

@@ -16,36 +16,22 @@ class Customer extends Authenticatable implements MustVerifyEmail
     /**
      * Toplu atamaya açık alanlar.
      */
-    protected $fillable = [
-        'name',
-        'email',
-        'avatar_path',
-        'phone',
-        'birth_date',
-        'gender',
-        'address',
-        'loyalty_points',
-        'receive_newsletters',
-        'password',
-    ];
+    protected $fillable = ['name', 'email', 'avatar_path', 'phone', 'birth_date', 'gender', 'address', 'loyalty_points', 'receive_newsletters', 'password'];
 
     /**
      * Serileştirmede gizlenecek alanlar.
      */
-    protected $hidden = [
-        'password',
-        'remember_token',
-    ];
+    protected $hidden = ['password', 'remember_token'];
 
     /**
      * Tip dönüşümleri.
      */
     protected $casts = [
-        'email_verified_at'   => 'datetime',
-        'birth_date'          => 'date',
+        'email_verified_at' => 'datetime',
+        'birth_date' => 'date',
         'receive_newsletters' => 'boolean',
-        'loyalty_points'      => 'integer',
-        'password'            => 'hashed',
+        'loyalty_points' => 'integer',
+        'password' => 'hashed',
     ];
 
     /**
@@ -96,5 +82,10 @@ class Customer extends Authenticatable implements MustVerifyEmail
                 Storage::disk('public')->delete($customer->avatar_path);
             }
         });
+    }
+
+    public function comments()
+    {
+        return $this->hasMany(\App\Models\Comment::class);
     }
 }

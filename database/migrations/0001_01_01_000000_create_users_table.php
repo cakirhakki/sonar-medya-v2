@@ -11,12 +11,32 @@ return new class extends Migration
         Schema::create('users', function (Blueprint $table) {
             $table->id();
 
+            // Kimlik
             $table->string('name');
-            $table->string('phone', 20)->unique();   // zorunlu telefon
-            $table->string('email')->unique();       // zorunlu e‑posta (login)
+
+            // Profil (job_title KALDIRILDI)
+            $table->text('bio')->nullable();
+
+            // Sosyal / web
+            $table->string('website_url')->nullable();
+            $table->string('twitter_url')->nullable();
+            $table->string('linkedin_url')->nullable();
+            $table->string('facebook_url')->nullable();
+            $table->string('instagram_url')->nullable();
+            $table->string('github_url')->nullable();
+
+            // İletişim ve login
+            $table->string('phone', 20)->unique();
+            $table->string('email')->unique();
             $table->timestamp('email_verified_at')->nullable();
 
-            $table->string('password');              // zorunlu parola
+            // Güvenlik
+            $table->string('password');
+
+            // Avatar
+            $table->string('avatar_path')->nullable();
+            $table->string('avatar_alt')->nullable();
+
             $table->rememberToken();
             $table->timestamps();
         });
@@ -39,8 +59,8 @@ return new class extends Migration
 
     public function down(): void
     {
-        Schema::dropIfExists('users');
-        Schema::dropIfExists('password_reset_tokens');
         Schema::dropIfExists('sessions');
+        Schema::dropIfExists('password_reset_tokens');
+        Schema::dropIfExists('users');
     }
 };
