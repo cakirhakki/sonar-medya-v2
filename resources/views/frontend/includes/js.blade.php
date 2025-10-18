@@ -1,20 +1,35 @@
-<!-- JS here -->
-      <script src="{{asset('site/assets/js/vendor/jquery.js')}}"></script>
-      <script src="{{asset('site/assets/js/vendor/waypoints.js')}}"></script>
-      <script src="{{asset('site/assets/js/bootstrap-bundle.js')}}"></script>
-      <script src="{{asset('site/assets/js/meanmenu.js')}}"></script>
-      <script src="{{asset('site/assets/js/swiper-bundle.js')}}"></script>
-      <script src="{{asset('site/assets/js/slick.js')}}"></script>
-      <script src="{{asset('site/assets/js/nouislider.js')}}"></script>
-      <script src="{{asset('site/assets/js/magnific-popup.js')}}"></script>
-      <script src="{{asset('site/assets/js/parallax.js')}}"></script>
-      <script src="{{asset('site/assets/js/backtotop.js')}}"></script>
-      <script src="{{asset('site/assets/js/nice-select.js')}}"></script>
-      <script src="{{asset('site/assets/js/purecounter.js')}}"></script>
-      <script src="{{asset('site/assets/js/wow.js')}}"></script>
-      <script src="{{asset('site/assets/js/custom.js')}}"></script>
-      <script src="{{asset('site/assets/js/isotope-pkgd.js')}}"></script>
-      <script src="{{asset('site/assets/js/imagesloaded-pkgd.js')}}"></script>
-      <script src="{{asset('site/assets/js/ajax-form.js')}}"></script>
-      <script src="{{asset('site/assets/js/main.js')}}"></script>
-      
+<!-- Jquery Library File -->
+<script src="js/jquery-3.7.1.min.js"></script>
+<!-- Bootstrap js file -->
+<script src="js/bootstrap.min.js"></script>
+<!-- Validator js file -->
+<script src="js/validator.min.js"></script>
+<!-- SlickNav js file -->
+<script src="js/jquery.slicknav.js"></script>
+<!-- Swiper js file -->
+<script src="js/swiper-bundle.min.js"></script>
+<!-- Counter js file -->
+<script src="js/jquery.waypoints.min.js"></script>
+<script src="js/jquery.counterup.min.js"></script>
+<!-- Isotop js file -->
+<script src="js/isotope.min.js"></script>
+<!-- Magnific js file -->
+<script src="js/jquery.magnific-popup.min.js"></script>
+<!-- SmoothScroll -->
+<script src="js/SmoothScroll.js"></script>
+<!-- Parallax js -->
+<script src="js/parallaxie.js"></script>
+<!-- MagicCursor js file -->
+<script src="js/gsap.min.js"></script>
+<script src="js/magiccursor.js"></script>
+<!-- Text Effect js file -->
+<script src="js/SplitText.js"></script>
+<script src="js/ScrollTrigger.min.js"></script>
+<!-- YTPlayer js File -->
+<script src="js/jquery.mb.YTPlayer.min.js"></script>
+<!-- Typed js file -->
+<script src="js/typed.js"></script>
+<!-- Wow js file -->
+<script src="js/wow.js"></script>
+<!-- Main Custom js file -->
+<script src="js/function.js"></script>
