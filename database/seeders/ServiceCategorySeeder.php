@@ -15,61 +15,51 @@ class ServiceCategorySeeder extends Seeder
     {
         $now = Carbon::now();
 
-        // 1) Mevcut 3 kategori (değiştirmiyoruz)
+        // 1) Mevcut 3 kategori (JSON alanları olmadan)
         $base = [
             [
-                'name' => 'Reklam ve Performans Yönetimi',
-                'slug' => 'reklam-ve-performans-yonetimi',
-                'description' => 'Meta/Google Ads, piksel entegrasyonu, hedef kitle optimizasyonu, kampanya stratejisi, kreatif metin, anahtar kelime ve rekabet analizi, SMS & e-posta pazarlama, haftalık/aylık raporlar; opsiyonel: TikTok, YouTube, Criteo/RTB House, TV & radyo, kreatif tasarım, sosyal medya danışmanlığı.',
-                'is_active' => true,
-                'show_in_menu' => false,
-                'menu_mode' => 0,
-                'menu_selected_service_ids' => [],
-                'menu_excluded_service_ids' => [],
+                'name'          => 'Reklam ve Performans Yönetimi',
+                'slug'          => 'reklam-ve-performans-yonetimi',
+                'description'   => 'Meta/Google Ads, piksel entegrasyonu, hedef kitle optimizasyonu, kampanya stratejisi, kreatif metin, anahtar kelime ve rekabet analizi, SMS & e-posta pazarlama, haftalık/aylık raporlar; opsiyonel: TikTok, YouTube, Criteo/RTB House, TV & radyo, kreatif tasarım, sosyal medya danışmanlığı.',
+                'is_active'     => true,
+                'show_in_menu'  => false,
+                'menu_mode'     => 0, // 0=Hepsi, 1=Seçililer
                 'display_order' => 1,
-                'created_at' => $now, 'updated_at' => $now,
+                'created_at'    => $now,
+                'updated_at'    => $now,
             ],
             [
-                'name' => 'Site Kurulumu ve Yönetimi',
-                'slug' => 'site-kurulumu-ve-yonetimi',
-                'description' => 'E-ticaret paket seçimi, tema kurulumu, piksel/Meta entegrasyonu, görsel destek, kampanya ve otomasyon kurguları, pazaryeri–muhasebe–kargo–ödeme entegrasyonları, temel SEO, statik sayfalar, teknik destek ve raporlama.',
-                'is_active' => true,
-                'show_in_menu' => false,
-                'menu_mode' => 0,
-                'menu_selected_service_ids' => [],
-                'menu_excluded_service_ids' => [],
+                'name'          => 'Site Kurulumu ve Yönetimi',
+                'slug'          => 'site-kurulumu-ve-yonetimi',
+                'description'   => 'E-ticaret paket seçimi, tema kurulumu, piksel/Meta entegrasyonu, görsel destek, kampanya ve otomasyon kurguları, pazaryeri–muhasebe–kargo–ödeme entegrasyonları, temel SEO, statik sayfalar, teknik destek ve raporlama.',
+                'is_active'     => true,
+                'show_in_menu'  => false,
+                'menu_mode'     => 0,
                 'display_order' => 2,
-                'created_at' => $now, 'updated_at' => $now,
+                'created_at'    => $now,
+                'updated_at'    => $now,
             ],
             [
-                'name' => 'Danışmanlık ve Eğitim Hizmetleri',
-                'slug' => 'danismanlik-ve-egitim-hizmetleri',
-                'description' => 'Panel eğitimi, destek talebi, online toplantı, canlı destek, özel marka/iletişim yöneticisi; opsiyonel: marka danışmanlığı, influencer & UGC, outdoor/TV/radyo, B2B marketing, UX, front-end/yazılım/içerik danışmanlığı, 3. parti uygulama danışmanlığı.',
-                'is_active' => true,
-                'show_in_menu' => false,
-                'menu_mode' => 0,
-                'menu_selected_service_ids' => [],
-                'menu_excluded_service_ids' => [],
+                'name'          => 'Danışmanlık ve Eğitim Hizmetleri',
+                'slug'          => 'danismanlik-ve-egitim-hizmetleri',
+                'description'   => 'Panel eğitimi, destek talebi, online toplantı, canlı destek, özel marka/iletişim yöneticisi; opsiyonel: marka danışmanlığı, influencer & UGC, outdoor/TV/radyo, B2B marketing, UX, front-end/yazılım/içerik danışmanlığı, 3. parti uygulama danışmanlığı.',
+                'is_active'     => true,
+                'show_in_menu'  => false,
+                'menu_mode'     => 0,
                 'display_order' => 3,
-                'created_at' => $now, 'updated_at' => $now,
+                'created_at'    => $now,
+                'updated_at'    => $now,
             ],
         ];
 
-        // upsert öncesi JSON alanlarını stringe çevir
-        $base = array_map(function ($r) {
-            $r['menu_selected_service_ids'] = json_encode($r['menu_selected_service_ids'] ?? []);
-            $r['menu_excluded_service_ids'] = json_encode($r['menu_excluded_service_ids'] ?? []);
-            return $r;
-        }, $base);
-
-        // 2) PDF’ten gelen kategoriler + tüm hizmetleri, menüde göster
+        // 2) PDF’ten gelen kategoriler + hizmetler (menüde göster)
         $pdfCats = [
             [
-                'name' => 'Dijital Pazarlama',
-                'slug' => 'dijital-pazarlama',
-                'description' => 'Meta Ads, Google Ads, Criteo, YouTube Ads, TikTok Ads, RTB House ile bütçeye uygun doğru kanal–hedefleme stratejileri.',
+                'name'          => 'Dijital Pazarlama',
+                'slug'          => 'dijital-pazarlama',
+                'description'   => 'Meta Ads, Google Ads, Criteo, YouTube Ads, TikTok Ads, RTB House ile bütçeye uygun doğru kanal–hedefleme stratejileri.',
                 'display_order' => 4,
-                'services' => [
+                'services'      => [
                     'Google Ads Kurulum ve Yönetim',
                     'Meta (Facebook/Instagram) Ads Yönetimi',
                     'YouTube Ads Kampanya Yönetimi',
@@ -79,11 +69,11 @@ class ServiceCategorySeeder extends Seeder
                 ],
             ],
             [
-                'name' => 'E-Ticaret Yönetimi',
-                'slug' => 'e-ticaret-yonetimi',
-                'description' => 'Altyapı & teknik kurulum, entegrasyon ve sistem yönetimi, pazarlama & iletişim kurguları, SEO & içerik, otomasyon ve süreç tasarımı, destek–eğitim–raporlama.',
+                'name'          => 'E-Ticaret Yönetimi',
+                'slug'          => 'e-ticaret-yonetimi',
+                'description'   => 'Altyapı & teknik kurulum, entegrasyon ve sistem yönetimi, pazarlama & iletişim kurguları, SEO & içerik, otomasyon ve süreç tasarımı, destek–eğitim–raporlama.',
                 'display_order' => 5,
-                'services' => [
+                'services'      => [
                     'Altyapı Seçimi ve Kurulum (İkas/Tsoft vb.)',
                     'Tema Kurulumu ve Görsel Düzenleme',
                     'Ödeme/Kargo/ERP Entegrasyonları',
@@ -93,11 +83,11 @@ class ServiceCategorySeeder extends Seeder
                 ],
             ],
             [
-                'name' => 'Teknik SEO',
-                'slug' => 'teknik-seo',
-                'description' => 'Crawl budget, XML sitemap & robots.txt, yönlendirme ve HTTP durum kodları, Core Web Vitals, yapısal veri (schema), kanonik & indexleme yönetimi.',
+                'name'          => 'Teknik SEO',
+                'slug'          => 'teknik-seo',
+                'description'   => 'Crawl budget, XML sitemap & robots.txt, yönlendirme ve HTTP durum kodları, Core Web Vitals, yapısal veri (schema), kanonik & indexleme yönetimi.',
                 'display_order' => 6,
-                'services' => [
+                'services'      => [
                     'Site Teknik SEO Denetimi (Audit)',
                     'Core Web Vitals İyileştirmeleri',
                     'Schema.org Yapısal Veri Uygulamaları',
@@ -107,11 +97,11 @@ class ServiceCategorySeeder extends Seeder
                 ],
             ],
             [
-                'name' => 'Danışmanlık',
-                'slug' => 'danismanlik',
-                'description' => 'Marka danışmanlığı, influencer & UGC, outdoor, TV & radyo, UX & web danışmanlığı, B2B pazarlama.',
+                'name'          => 'Danışmanlık',
+                'slug'          => 'danismanlik',
+                'description'   => 'Marka danışmanlığı, influencer & UGC, outdoor, TV & radyo, UX & web danışmanlığı, B2B pazarlama.',
                 'display_order' => 7,
-                'services' => [
+                'services'      => [
                     'Marka ve İletişim Danışmanlığı',
                     'UGC/Influencer Stratejisi',
                     'Medya Planlama (TV/Radio/Outdoor)',
@@ -120,11 +110,11 @@ class ServiceCategorySeeder extends Seeder
                 ],
             ],
             [
-                'name' => 'Görsel Tasarım',
-                'slug' => 'gorsel-tasarim',
-                'description' => 'Marka odaklı görseller, kreatif kampanya tasarımları, sosyal medya içerik tasarımları, kurumsal kimlik çalışmaları.',
+                'name'          => 'Görsel Tasarım',
+                'slug'          => 'gorsel-tasarim',
+                'description'   => 'Marka odaklı görseller, kreatif kampanya tasarımları, sosyal medya içerik tasarımları, kurumsal kimlik çalışmaları.',
                 'display_order' => 8,
-                'services' => [
+                'services'      => [
                     'Sosyal Medya İçerik Tasarımları',
                     'Banner ve Kampanya Görselleri',
                     'Kurumsal Kimlik ve Logo',
@@ -132,11 +122,11 @@ class ServiceCategorySeeder extends Seeder
                 ],
             ],
             [
-                'name' => 'Yazılım ve Mobil Uygulama',
-                'slug' => 'yazilim-ve-mobil-uygulama',
-                'description' => 'İhtiyaca özel yazılım geliştirme, iOS & Android mobil uygulamalar, entegrasyon ve teknik danışmanlık.',
+                'name'          => 'Yazılım ve Mobil Uygulama',
+                'slug'          => 'yazilim-ve-mobil-uygulama',
+                'description'   => 'İhtiyaca özel yazılım geliştirme, iOS & Android mobil uygulamalar, entegrasyon ve teknik danışmanlık.',
                 'display_order' => 9,
-                'services' => [
+                'services'      => [
                     'Özel Yazılım Geliştirme',
                     'API ve Üçüncü Parti Entegrasyonlar',
                     'iOS Mobil Uygulama',
@@ -151,39 +141,33 @@ class ServiceCategorySeeder extends Seeder
             ServiceCategory::upsert(
                 $base,
                 ['slug'],
-                [
-                    'name', 'description', 'display_order', 'is_active',
-                    'show_in_menu', 'menu_mode',
-                    'menu_selected_service_ids', 'menu_excluded_service_ids', 'updated_at'
-                ]
+                ['name','description','display_order','is_active','show_in_menu','menu_mode','updated_at']
             );
 
             ServiceCategory::withTrashed()
                 ->whereIn('slug', array_column($base, 'slug'))
                 ->restore();
 
-            // b) PDF kategorileri: menüde göster + tüm hizmetler
+            // b) PDF kategorileri: menüde göster + hizmet oluştur
             foreach ($pdfCats as $c) {
-                $category = ServiceCategory::withTrashed()
-                    ->firstOrNew(['slug' => $c['slug']]);
+                $category = ServiceCategory::withTrashed()->firstOrNew(['slug' => $c['slug']]);
 
                 $category->fill([
-                    'name' => $c['name'],
-                    'description' => $c['description'],
+                    'name'          => $c['name'],
+                    'description'   => $c['description'],
                     'display_order' => $c['display_order'],
-                    'is_active' => true,
-                    'show_in_menu' => true,
-                    'menu_mode' => 0,
-                    'menu_selected_service_ids' => [],
-                    'menu_excluded_service_ids' => [],
-                    'updated_at' => $now,
-                    'created_at' => $category->exists ? $category->created_at : $now,
+                    'is_active'     => true,
+                    'show_in_menu'  => true,
+                    'menu_mode'     => 0, // Hepsi
+                    'updated_at'    => $now,
+                    'created_at'    => $category->exists ? $category->created_at : $now,
                 ])->save();
 
                 if ($category->trashed()) {
                     $category->restore();
                 }
 
+                // Hizmetleri oluştur/güncelle
                 $order = 1;
                 foreach ($c['services'] as $svcName) {
                     $svcSlug = Str::slug($svcName, '-', 'tr');
@@ -195,10 +179,10 @@ class ServiceCategorySeeder extends Seeder
 
                     if ($service) {
                         $service->fill([
-                            'name' => $svcName,
-                            'is_active' => true,
+                            'name'          => $svcName,
+                            'is_active'     => true,
                             'display_order' => $order++,
-                            'updated_at' => $now,
+                            'updated_at'    => $now,
                         ])->save();
 
                         if ($service->trashed()) {
@@ -207,15 +191,31 @@ class ServiceCategorySeeder extends Seeder
                     } else {
                         Service::create([
                             'service_category_id' => $category->id,
-                            'name' => $svcName,
-                            'slug' => $svcSlug,
-                            'description' => null,
-                            'is_active' => true,
-                            'display_order' => $order++,
-                            'created_at' => $now, 'updated_at' => $now,
+                            'name'                => $svcName,
+                            'slug'                => $svcSlug,
+                            'description'         => null,
+                            'is_active'           => true,
+                            'display_order'       => $order++,
+                            'created_at'          => $now,
+                            'updated_at'          => $now,
                         ]);
                     }
                 }
+
+                // Seçililer moduna alınacaksa pivot senkronu örneği:
+                // if ((int) $category->menu_mode === 1) {
+                //     $ids = Service::where('service_category_id', $category->id)
+                //         ->where('is_active', true)
+                //         ->orderBy('display_order')->orderBy('name')
+                //         ->pluck('id')->values()->all();
+                //     $sync = [];
+                //     foreach ($ids as $i => $sid) {
+                //         $sync[$sid] = ['position' => $i];
+                //     }
+                //     $category->menuServices()->sync($sync);
+                // } else {
+                //     $category->menuServices()->detach();
+                // }
             }
         });
     }

@@ -20,15 +20,17 @@ return new class extends Migration {
             // Vitrin
             $t->boolean('is_active')->default(true)->index();
             $t->boolean('show_in_menu')->default(false)->index();
-            $t->unsignedTinyInteger('menu_mode')->default(0); // 0: Hepsi, 1: Seçililer, 2: Hariç
-            $t->json('menu_selected_service_ids')->nullable();
-            $t->json('menu_excluded_service_ids')->nullable();
+
+            // 0: Hepsi, 1: Seçililer
+            $t->unsignedTinyInteger('menu_mode')
+              ->default(0)
+              ->comment('0=Hepsi, 1=Seçililer');
 
             // Sıra
             $t->unsignedSmallInteger('display_order')->default(0)->index();
 
             $t->timestamps();
-            $t->softDeletes(); // birleşik: ayrı alter gerekmiyor
+            $t->softDeletes();
 
             // Yardımcı indeksler
             $t->index(['is_active', 'display_order']);

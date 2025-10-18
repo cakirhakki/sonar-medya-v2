@@ -12,8 +12,7 @@ use Filament\Tables\Table;
 
 class ServiceCategoryResource extends Resource
 {
-    use HasFormSchema;
-    use HasTableSchema;
+    use HasFormSchema, HasTableSchema;
 
     protected static ?string $model = ServiceCategory::class;
 

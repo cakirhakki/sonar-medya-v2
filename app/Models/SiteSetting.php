@@ -2,8 +2,9 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Casts\Attribute;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Cache;
 use Spatie\Image\Enums\Fit;
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
@@ -26,7 +27,7 @@ class SiteSetting extends Model implements HasMedia
         // Sosyal
         'facebook','instagram','twitter','linkedin','youtube',
 
-        // Görseller (public disk relative path)
+        // Görseller (public disk relative path) – geri uyum için tutuluyor
         'logo_path','favicon_path','meta_image_path',
 
         // JSON
@@ -53,16 +54,24 @@ class SiteSetting extends Model implements HasMedia
 
     public function registerMediaCollections(): void
     {
-        // Hakkımızda galerisi: çoklu, public disk
+        // Hakkımızda galerisi: çoklu
         $this->addMediaCollection('about_gallery')->useDisk('public');
+
+        // Tekil medya koleksiyonları
+        $this->addMediaCollection('logo')->singleFile()->useDisk('public');
+        $this->addMediaCollection('favicon')->singleFile()->useDisk('public');
+        $this->addMediaCollection('meta_image')->singleFile()->useDisk('public');
     }
 
     public function registerMediaConversions(Media $media = null): void
     {
-        // 16:9 dönüşümler (blade'de getUrl('about_lg') vb. kullanılabilir)
+        // About gallery 16:9
         $this->addMediaConversion('about_lg')->fit(Fit::Crop, 1200, 675)->format('webp')->optimize();
         $this->addMediaConversion('about_md')->fit(Fit::Crop, 992, 558)->format('webp')->optimize();
         $this->addMediaConversion('about_sm')->fit(Fit::Crop, 768, 432)->format('webp')->optimize();
+
+        // Logo / meta için hafif boyut
+        $this->addMediaConversion('web')->width(320)->format('webp')->optimize()->nonQueued();
     }
 
     /* -------------------- Public URL helpers -------------------- */
@@ -74,9 +83,24 @@ class SiteSetting extends Model implements HasMedia
         return asset('storage/' . ltrim($path, '/'));
     }
 
-    public function getLogoUrlAttribute(): ?string      { return $this->makePublicUrl($this->logo_path); }
-    public function getFaviconUrlAttribute(): ?string   { return $this->makePublicUrl($this->favicon_path); }
-    public function getMetaImageUrlAttribute(): ?string { return $this->makePublicUrl($this->meta_image_path); }
+    // Önce medya, yoksa eski path alanları
+    public function getLogoUrlAttribute(): ?string
+    {
+        $m = $this->getFirstMediaUrl('logo', 'web');
+        return $m ?: $this->makePublicUrl($this->logo_path);
+    }
+
+    public function getFaviconUrlAttribute(): ?string
+    {
+        $m = $this->getFirstMediaUrl('favicon');
+        return $m ?: $this->makePublicUrl($this->favicon_path);
+    }
+
+    public function getMetaImageUrlAttribute(): ?string
+    {
+        $m = $this->getFirstMediaUrl('meta_image', 'web');
+        return $m ?: $this->makePublicUrl($this->meta_image_path);
+    }
 
     /* -------------------- Phone / WhatsApp normalize -------------------- */
 
@@ -131,11 +155,19 @@ class SiteSetting extends Model implements HasMedia
 
     /* -------------------- Thumb helper -------------------- */
 
-    /** ✅ ThumbController’a URL değil, storage relative PATH gönder */
+    /** Storage relative PATH bekleyen ThumbController için */
     public function thumbLogo(int $w = 120, int $h = 120, string $fit = 'cover'): ?string
     {
         if (!$this->logo_path) return null;
-        $src = str_replace('\\','/', ltrim($this->logo_path, '/')); // örn: site/01K5....png
+        $src = str_replace('\\','/', ltrim($this->logo_path, '/'));
         return route('thumb', ['src' => $src, 'w' => $w, 'h' => $h, 'fit' => $fit]);
+    }
+
+    /* -------------------- Cache -------------------- */
+
+    protected static function booted(): void
+    {
+        static::saved(fn () => Cache::forget('site_settings_single'));
+        static::deleted(fn () => Cache::forget('site_settings_single'));
     }
 }

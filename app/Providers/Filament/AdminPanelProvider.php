@@ -93,7 +93,7 @@ class AdminPanelProvider extends PanelProvider
 
             // Widget’lar
             ->discoverWidgets(in: app_path('Filament/Widgets'), for: 'App\\Filament\\Widgets')
-            ->widgets([Widgets\AccountWidget::class, Widgets\FilamentInfoWidget::class, CalendarWidget::class])
+            ->widgets([Widgets\AccountWidget::class, CalendarWidget::class])
 
             // Kullanıcı menüsü
             ->userMenuItems([MenuItem::make()->label('Profilim')->icon('heroicon-m-user-circle')->url(fn(): string => Profile::getUrl())])

@@ -6,6 +6,7 @@ use App\Filament\Resources\ServiceCategoryResource\Actions\MenuPickAction;
 use Filament\Tables;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Support\Facades\Cache;
 
 trait HasTableSchema
 {
@@ -40,9 +41,24 @@ trait HasTableSchema
                     ->toggleable(isToggledHiddenByDefault: true)
                     ->searchable(),
 
+                Tables\Columns\ToggleColumn::make('show_in_menu')
+                    ->label('Menüde')
+                    ->sortable()
+                    ->afterStateUpdated(function (bool $state, $record) {
+                        // Menüde açılırsa kategori pasif ise aktifleştir
+                        if ($state && ! $record->is_active) {
+                            $record->is_active = true;
+                        }
+                        $record->save();
+                        Cache::forget('menu.services');
+                    }),
+
                 Tables\Columns\ToggleColumn::make('is_active')
                     ->label('Aktif')
-                    ->sortable(),
+                    ->sortable()
+                    ->afterStateUpdated(function () {
+                        Cache::forget('menu.services');
+                    }),
             ])
             ->filters([
                 Tables\Filters\TernaryFilter::make('is_active')
@@ -55,9 +71,16 @@ trait HasTableSchema
                         false: fn (Builder $q) => $q->where('is_active', false),
                         blank: fn (Builder $q) => $q
                     ),
+
+                Tables\Filters\TernaryFilter::make('show_in_menu')
+                    ->label('Menüde mi?')
+                    ->trueLabel('Evet')
+                    ->falseLabel('Hayır')
+                    ->nullable(),
             ])
             ->actions([
-                MenuPickAction::make(),
+                // Menü seçimi butonu sadece menüde gösterilenlerde görünsün
+                MenuPickAction::make()->visible(fn ($record) => (bool) $record->show_in_menu),
                 Tables\Actions\EditAction::make()->label('Düzenle'),
                 Tables\Actions\DeleteAction::make()->label('Sil'),
             ])

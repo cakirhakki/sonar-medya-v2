@@ -7,7 +7,6 @@ use Filament\Forms\Components\Group;
 use Filament\Forms\Components\Placeholder;
 use Filament\Forms\Components\Radio;
 use Filament\Forms\Components\Select;
-use Filament\Forms\Components\Toggle;
 use Filament\Forms\Get;
 use Filament\Forms\Set;
 use Filament\Tables;
@@ -38,11 +37,6 @@ final class MenuPickAction
                     Group::make()
                         ->statePath('menu')
                         ->schema([
-                            Toggle::make('show_in_menu')
-                                ->label('Menüde Göster')
-                                ->inline(false)
-                                ->default((bool) $r->show_in_menu),
-
                             Radio::make('menu_mode')
                                 ->label('Listeleme Modu')
                                 ->inline()
@@ -50,18 +44,36 @@ final class MenuPickAction
                                 ->default((int) ($r->menu_mode ?? 0))
                                 ->live()
                                 ->afterStateUpdated(function (int $state, Set $set, Get $get) use ($r) {
-                                    if ($state === 1 && empty($get('menu_selected_service_ids'))) {
-                                        $ids = $r->services()->where('is_active', true)->pluck('id')->all();
-                                        $set('menu_selected_service_ids', $ids);
+                                    if ($state !== 1) {
+                                        return;
                                     }
+                                    $current = (array) $get('menu_selected_service_ids');
+                                    if (!empty($current)) {
+                                        return;
+                                    }
+                                    $ids = $r->menuServices()->pluck('services.id')->all();
+                                    if (empty($ids)) {
+                                        $ids = $r->services()->where('is_active', true)->pluck('id')->all();
+                                    }
+                                    $set('menu_selected_service_ids', array_values(array_map('intval', $ids)));
                                 })
                                 ->helperText('Hepsi: tüm AKTİF hizmetler. Seçililer: sadece seçtiklerin.'),
 
-                            // DEĞİŞTİ: dehydrated(false) kaldırıldı + reactive ve normalleştirme eklendi
                             Select::make('menu_selected_service_ids')
                                 ->label('Menüde Gösterilecek Hizmetler')
                                 ->options($serviceOptions)
-                                ->default(fn () => (array) $r->menu_selected_service_ids)
+                                ->afterStateHydrated(function (Select $component, $state) use ($r) {
+                                    if (!empty($state)) {
+                                        return;
+                                    }
+                                    if ((int) ($r->menu_mode ?? 0) !== 1) {
+                                        return;
+                                    }
+                                    $ids = $r->menuServices()->pluck('services.id')->all();
+                                    if (!empty($ids)) {
+                                        $component->state(array_values(array_map('intval', $ids)));
+                                    }
+                                })
                                 ->searchable()
                                 ->preload()
                                 ->multiple()
@@ -80,34 +92,30 @@ final class MenuPickAction
                 ];
             })
             ->action(function (ServiceCategory $r, array $data) {
-                $form = (array) ($data['menu'] ?? []);
-                $mode = (int) ($form['menu_mode'] ?? 0);
-                $show = (bool) ($form['show_in_menu'] ?? $r->show_in_menu);
-                $selected = array_values(array_map('intval', (array) ($form['menu_selected_service_ids'] ?? [])));
+                $form     = (array) ($data['menu'] ?? $data ?? []);
+                $mode     = (int) ($form['menu_mode'] ?? 0);
+                $selected = array_values(array_unique(array_map('intval', (array) ($form['menu_selected_service_ids'] ?? []))));
 
-                $payload = [
-                    'show_in_menu'              => $show,
-                    'menu_mode'                 => $mode,
-                    'menu_selected_service_ids' => [],
-                    'menu_excluded_service_ids' => [],
-                ];
+                // show_in_menu burada değişmez; liste ekranındaki toggle yönetir.
+                $r->menu_mode = $mode;
+                $r->save();
 
-                if ($show) {
+                if (! $r->show_in_menu) {
+                    // Menüde değilse pivotu temiz tut
+                    $r->menuServices()->detach();
+                } else {
                     if ($mode === 1) {
-                        // Seçililer: kullanıcı seçimini aynen kaydet
-                        $payload['menu_selected_service_ids'] = $selected;
+                        // Seçililer: sırayı koru
+                        $sync = [];
+                        foreach ($selected as $i => $sid) {
+                            $sync[$sid] = ['position' => $i];
+                        }
+                        $r->menuServices()->sync($sync);
                     } else {
-                        // Hepsi: tüm aktifleri yaz
-                        $ids = $r->services()->where('is_active', true)->pluck('id')->all();
-                        $payload['menu_selected_service_ids'] = array_map('intval', $ids);
+                        // Hepsi: pivot boş
+                        $r->menuServices()->detach();
                     }
                 }
-
-                // Sadece beklenen sütunları güncelle
-                $r->refresh();
-                ServiceCategory::query()
-                    ->whereKey($r->getKey())
-                    ->update($payload);
 
                 Cache::forget('menu.services');
             });
